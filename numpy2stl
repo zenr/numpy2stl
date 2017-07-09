@@ -1,24 +1,144 @@
-// Find max value in a vector
+// Check if there is atleast one element greater than something. 
+Python:
+np.any(marray > 12) # returns True if there is atleast one element
+
+C++: 
+auto result = find_if(begin(myvec), end(myvec), [](int x){return(x > 12);});
+if(result == end(myvec))
+     std::cout << "There is no element greater than 12 in list lst." << std::endl;
+else
+     result++;
+std::cout << "There is an element greater than 12 in list lst, and it is followed by a "<< *(result) << std::endl;
+
+// Find max value and its position in a vector or array 
 #numpy
-#C++
+maxval = np.max(histval) # Returns max value
+maxpos = np.argmax(histval, axis = 0) # Returns max position
 
-// Find max value and its position in a vector
+#C++
+auto minelem = std::min_element(myvec.begin(), myvec.end(), mycomplesser);
+std::cout << "Min is " << *minelem << " at "<< minelem-myvec.begin() << std::endl;
+auto maxelem = std::max_element(myvec.begin(), myvec.end(), mycomplesser); // Note that we are using the same function for both max and min
+std::cout << "Max is " << *maxelem << " at "<< maxelem-myvec.begin() << std::endl;
+
+// first nonzero value and position in a vector  or array 
 #numpy
-#C++
+nonzerotuple = np.nonzero(myarray) # This returns a tuple where elements in the tuple are indices across each axis 
+firstposition = [i[0] for i in nonzerotuple]
 
-// first nonzero value and position
-#numpy
 #C++
+auto zeropos = std::distance(begin(myvec), find_if(begin(myvec), end(myvec), [](int x) { return x != 0; }));
+std::cout << "First non-zero is at " << zeropos << std::endl;
 
-// Obtain histogram 
-#python - http://docs.scipy.org/doc/numpy/reference/generated/numpy.histogram.html
+// Obtain histogram of vector  or array 
+#Python - 
+Hist = np.histogram(myarray)
+http://docs.scipy.org/doc/numpy/reference/generated/numpy.histogram.html
+
 #C++
+#include <map>
+std::map<int, std::size_t> hist;
+for(auto i : myvec)
+     ++hist[i];    
+for(auto i : hist) //print the map
+     std::cout << i.first << " --- " << i.second << std::endl;
 
-// Adding an element to the end of numpy array or STL vector
+// Adding an element to the end of numpy array or STL vector or array 
 #python
+np.append(myarray, 4)
+
 #C++ 
+std::vector<int> myvec = {1, 2, 3, 4};
+myvec.push_back(5);
+for(int x: myvec)
+    std::cout << x << std::endl;
 
+Calling a function on every element of a C++ vector
+std::for_each(v.begin(), v.end(), &foo);
+std::for_each(v.begin(), v.end(), [](int x){ return x*x; } );
 
-// Sorting 
+// Sorting vector  or array 
 #Python
+np.sort(myarray, axis=0, kind='mergesort')
+
 #C++
+std::vector<int> myvec = {15, 3, 4, 1, 2};
+myvec.push_back(5);
+for(int x: myvec)
+     std::cout << x << std::endl;
+
+std::sort(myvec.begin(), myvec.end());
+std::cout << "After sorting\n";
+for(int x: myvec)
+     std::cout << x << std::endl;
+
+Clear array
+Python: 
+To clear an array and replace with some other value, use myarray.fill(0.0). If you want to remove all elements and reduce the array size to zero, then use myarray = np.resize(myarray, (0, 0))
+
+C++:
+Clear a vector or any collection in STL use thatitem.clear()
+
+Size of array
+Python: myarray.size in numpy 
+
+C++:
+thatitem.size()
+
+# Sum all values in a vector or array
+# numpy 
+np.sum(myarray)
+
+#C++
+for(auto x: myvec) // myvec is a vector
+     sum += x;
+
+// Range based loop for map
+for(auto& x: myvec) // myvec is a vector
+     std::cout << x.first << " has value of " << x.second << std::endl;
+
+# Average all values in a vector or array
+# Python:  
+np.sum(myarray)/myarray.size
+
+# C++
+for(auto x: myvec)
+        sum += x;
+std::cout << "The sum is "<< sum << std::endl;
+std::cout << "The average is "<< float(sum)/myvec.size() << std::endl;
+
+# Get unique items from a vector or array
+# Python -  we can use Python's set or np.unique
+np.unique(myarray)
+
+#C++
+#include <set>
+std::set<int> myset;
+for(auto item: myvec)
+     myset.insert(item);        
+// Reassign it to myvec again
+myvec.assign(myset.begin(), myset.end());
+
+
+# Find elements in a vector or array that satisfy a criterion - http://stackoverflow.com/questions/21865981/c-tools-with-the-same-functionality-as-pythons-filter-and-map
+
+using find_if or find
+auto result = find_if(begin(myvec), end(myvec), [](int x){return(x > 12);});
+if(result == end(myvec))
+     std::cout << "There is no element greater than 12 in list lst." << std::endl;
+else
+     result++;
+std::cout << "There is an element greater than 12 in list lst, and it is followed by a "<< *(result) << std::endl;
+
+// Python filter
+auto result = std::vector<int>{};
+std::copy_if(myList.begin(), myList.end(), std::back_inserter(result), [](int x){ return x >= 0; });
+
+// Measure time for a function call
+#include <chrono>
+std::chrono::high_resolution_clock::time_point t1, t2;
+t1 = std::chrono::high_resolution_clock::now();
+// Some big function call
+t2 = std::chrono::high_resolution_clock::now();
+auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+std::cout << "The time to process in microseconds is " << duration << std::endl;
