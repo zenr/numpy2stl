@@ -1,6 +1,6 @@
 // Check if there is atleast one element greater than something. 
 Python:
-np.any(marray > 12) # returns True if there is atleast one element
+np.any(marray > 12) # returns True if there is atleast one element is greater than 12.
 
 C++: 
 auto result = find_if(begin(myvec), end(myvec), [](int x){return(x > 12);});
